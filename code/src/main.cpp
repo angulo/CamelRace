@@ -30,6 +30,8 @@ main(int argc, char **argv)
 		return 1;
 	}
 
+	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
+
 	OGF::Bootstrap::getSingletonPtr()->run();
 	OGF::Bootstrap::getSingletonPtr()->shutdown();
 

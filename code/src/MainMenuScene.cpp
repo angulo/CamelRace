@@ -41,7 +41,7 @@ MainMenuScene::_setCurrentOption(MainMenuOption::Option option)
 CEGUI::Window *
 MainMenuScene::_createOptionWindow(const std::string &text, const int &x, const int &y)
 {
-	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/Text");
+	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText");
 	result->setProperty("Text", CEGUI::String("[colour='") + MENU_OPTION_COLOR_UNSELECTED + "']" + text);
 	result->setProperty("Font", MENU_OPTION_FONT);
 	result->setProperty("UnifiedAreaRect", "{{0," + Ogre::StringConverter::toString(x) 
@@ -64,6 +64,7 @@ MainMenuScene::enter()
 {
 	_windowBackground = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage");
 	_windowBackground->setProperty("Image", "set:Menus image:Main");
+	_windowBackground->setProperty("FrameEnabled", "False");
 
 	_optionsMap[MainMenuOption::PLAY] = _createOptionWindow("PLAY", 100, 80);
 	_optionsMap[MainMenuOption::RECORDS] = _createOptionWindow("HIGH SCORES", 100, 80);
