@@ -16,6 +16,7 @@ bin_PROGRAMS = CamelRace
 
 CamelRace_SOURCES = \
 	src/main.cpp \
+	src/MainMenuScene.cpp \
 	src/SceneFactory.cpp
 
 CamelRace_LDADD = $(OGF_LIBS)

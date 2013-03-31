@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.h -- Scene factory header file
+ * MainMenuScene.h -- Main menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,29 +16,51 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENE_FACTORY_H
-#define _SCENE_FACTORY_H
+#ifndef _MAIN_MENU_SCENE_H_
+#define _MAIN_MENU_SCENE_H_
 
 #include <OGF/OGF.h>
 
-namespace CamelRace {
+#include "SceneFactory.h"
+#include "UIConfig.h"
 
-	namespace Scene {
-		enum { 
-			MENU_MAIN = 0,
-			MENU_RECORDS = 1,
-			MENU_OPTIONS = 2,
-			MENU_HELP = 3,
-			EXIT = 4,
-			GAME = 5
+namespace CamelRace {
+	
+	namespace MainMenuOption {
+
+		enum Option {
+			PLAY = 0,
+			RECORDS = 1,
+			OPTIONS = 2,
+			HELP = 3,
+			EXIT = 4
 		};
 	};
 
-	class SceneFactory : public OGF::ISceneFactory {
+	class MainMenuScene : public OGF::Scene {
 		
-		public:
+		private:
+			
+			CEGUI::Window *_windowBackground;
 
-			OGF::Scene * create(OGF::SceneId sceneId);
+			std::map<MainMenuOption::Option, CEGUI::Window *> _optionsMap;
+			MainMenuOption::Option _currentOption;
+
+			void _setCurrentOption(MainMenuOption::Option option);
+			CEGUI::Window * _createOptionWindow(const std::string &text, const int &x, const int &y);
+			void _processCurrentOption();
+
+		public:
+			
+			MainMenuScene();
+			~MainMenuScene();
+
+			void enter();
+			void exit();
+			void pause();
+			void resume();
+
+			bool keyPressed(const OIS::KeyEvent &event);
 	};
 };
 

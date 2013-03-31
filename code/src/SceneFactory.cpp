@@ -19,11 +19,20 @@
 #include <OGF/OGF.h>
 
 #include "SceneFactory.h"
+#include "MainMenuScene.h"
 
 using namespace CamelRace;
 
 OGF::Scene *
 SceneFactory::create(OGF::SceneId sceneId)
 {
-	return NULL;
+	OGF::Scene *scene = NULL;
+
+	switch(sceneId) {
+		case Scene::MENU_MAIN:
+			scene = new MainMenuScene();
+			break;
+	}
+
+	return scene;
 }
