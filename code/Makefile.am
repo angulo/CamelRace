@@ -5,7 +5,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
-	-I "." \
+	-I "./include" \
 	$(OGF_CFLAGS)
 
 AM_CFLAGS =\
@@ -15,6 +15,7 @@ AM_CFLAGS =\
 bin_PROGRAMS = CamelRace
 
 CamelRace_SOURCES = \
-	main.cpp
+	src/main.cpp \
+	src/SceneFactory.cpp
 
 CamelRace_LDADD = $(OGF_LIBS)

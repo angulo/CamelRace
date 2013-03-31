@@ -16,5 +16,5 @@ PKG_CHECK_MODULES(OGF, [OGF])
 
 AC_OUTPUT([
 	Makefile
-	src/Makefile
+	code/Makefile
 ])

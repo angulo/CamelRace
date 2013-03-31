@@ -1,6 +1,6 @@
-SUBDIRS = src
+SUBDIRS = code
 
-DIST_SUBDIRS = src
+DIST_SUBDIRS = code
 
 camelracedocdir = ${prefix}/doc/camelrace
 

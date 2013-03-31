@@ -11,7 +11,10 @@ rm -rf \
 	install-sh \
 	missing \
 	Makefile.in \
+	Ogre.log \
+	config/Ogre.log \
+	config/CEGUI.log \
 	aclocal.m4 \
 	config.h.in \
 	ltmain.sh \
-	src/Makefile.in
+	code/Makefile.in
