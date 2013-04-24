@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * GameScene.cpp -- Game scene implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,25 +16,83 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SceneFactory.h"
+#include "GameScene.h"
 
 using namespace CamelRace;
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
+
+GameScene::GameScene()
 {
-	OGF::Scene *scene = NULL;
 
-	switch(sceneId) {
-		case Scene::MENU_MAIN:
-			scene = new MainMenuScene();
-			break;
-		case Scene::GAME:
-			scene = new GameScene();
-			break;
-		default:
-			break;
-	}
+}
 
-	return scene;
+GameScene::~GameScene()
+{
+
+}
+
+void
+GameScene::enter()
+{
+
+}
+
+void
+GameScene::exit()
+{
+
+}
+
+void
+GameScene::pause()
+{
+
+}
+
+void
+GameScene::resume()
+{
+
+}
+
+bool
+GameScene::frameStarted(const Ogre::FrameEvent& event)
+{
+
+}
+
+bool
+GameScene::frameEnded(const Ogre::FrameEvent& event)
+{
+
+}
+
+bool
+GameScene::keyPressed(const OIS::KeyEvent& event)
+{
+
+}
+
+bool
+GameScene::keyReleased(const OIS::KeyEvent& event)
+{
+
+}
+
+bool
+GameScene::mouseMoved(const OIS::MouseEvent& event)
+{
+
+}
+
+bool
+GameScene::mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId)
+{
+
+}
+
+bool
+GameScene::mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId)
+{
+
 }

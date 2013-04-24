@@ -53,6 +53,7 @@ MainMenuScene::_createOptionWindow(const std::string &text, const int &x, const 
 MainMenuScene::MainMenuScene()
 	:	_currentOption(MainMenuOption::PLAY)
 {
+	_initConfigReader("scenes/main_menu.cfg");
 }
 
 MainMenuScene::~MainMenuScene()

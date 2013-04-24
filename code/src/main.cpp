@@ -26,7 +26,7 @@ main(int argc, char **argv)
 {
 	OGF::ISceneFactory *sceneFactory = new CamelRace::SceneFactory();
 
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", APPLICATION_WINDOW_NAME, sceneFactory, CamelRace::Scene::MENU_MAIN)) {
+	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", APPLICATION_WINDOW_NAME, sceneFactory, CamelRace::Scene::GAME)) {
 		return 1;
 	}
 

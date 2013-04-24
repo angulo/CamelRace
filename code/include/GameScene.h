@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * GameScene.h -- Game scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,25 +16,38 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _GAME_SCENE_H_
+#define _GAME_SCENE_H_
+
+#include <OGF/OGF.h>
+
 #include "SceneFactory.h"
+#include "UIConfig.h"
 
-using namespace CamelRace;
+namespace CamelRace {
+	
+	class GameScene : public OGF::Scene {
+		
+		public:
+			
+			GameScene();
+			~GameScene();
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
-{
-	OGF::Scene *scene = NULL;
+			void enter();
+			void exit();
+			void pause();
+			void resume();
 
-	switch(sceneId) {
-		case Scene::MENU_MAIN:
-			scene = new MainMenuScene();
-			break;
-		case Scene::GAME:
-			scene = new GameScene();
-			break;
-		default:
-			break;
-	}
+			bool frameStarted(const Ogre::FrameEvent& event);
+			bool frameEnded(const Ogre::FrameEvent& event);
 
-	return scene;
-}
+			bool keyPressed(const OIS::KeyEvent& event);
+			bool keyReleased(const OIS::KeyEvent& event);
+
+			bool mouseMoved(const OIS::MouseEvent& event);
+			bool mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId);
+			bool mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId);
+	};
+};
+
+#endif

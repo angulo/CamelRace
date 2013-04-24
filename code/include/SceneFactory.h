@@ -21,6 +21,9 @@
 
 #include <OGF/OGF.h>
 
+#include "GameScene.h"
+#include "MainMenuScene.h"
+
 namespace CamelRace {
 
 	namespace Scene {
