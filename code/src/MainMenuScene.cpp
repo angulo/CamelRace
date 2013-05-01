@@ -27,7 +27,7 @@ MainMenuScene::_setCurrentOption(MainMenuOption::Option option)
 	CEGUI::Window *currentOptionWindow = _optionsMap[_currentOption];
 	CEGUI::String currentOptionText = currentOptionWindow->getText();
 	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
-		MENU_OPTION_COLOR_UNSELECTED));
+		_configValue<std::string>("font_color_unselected")));
 
 	_currentOption = option;
 
@@ -35,25 +35,28 @@ MainMenuScene::_setCurrentOption(MainMenuOption::Option option)
 	currentOptionWindow = _optionsMap[_currentOption];
 	currentOptionText = currentOptionWindow->getText();
 	currentOptionWindow->setText(currentOptionText.replace(9, 8, 
-		MENU_OPTION_COLOR_SELECTED));
+		_configValue<std::string>("font_color_selected")));
 }
 
 CEGUI::Window *
-MainMenuScene::_createOptionWindow(const std::string &text, const int &x, const int &y)
+MainMenuScene::_createOptionWindow(const std::string &text, const std::string &font, const int &x, const int &y)
 {
 	CEGUI::Window *result = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticText");
-	result->setProperty("Text", CEGUI::String("[colour='") + MENU_OPTION_COLOR_UNSELECTED + "']" + text);
-	result->setProperty("Font", MENU_OPTION_FONT);
+	result->setProperty("Text", CEGUI::String("[colour='") + _configValue<std::string>("font_color_unselected") + "']" + text);
+	result->setProperty("Font", font);
 	result->setProperty("UnifiedAreaRect", "{{0," + Ogre::StringConverter::toString(x) 
 		+ "},{0," + Ogre::StringConverter::toString(y) + "},{1,0},{1,0}}");
+	result->setProperty("FrameEnabled", "False");
 
 	return result;
 }
 
 MainMenuScene::MainMenuScene()
-	:	_currentOption(MainMenuOption::PLAY)
+	:	_currentOption(MainMenuOption::PLAY), _exit(false)
 {
 	_initConfigReader("scenes/main_menu.cfg");
+	CEGUI::FontManager::getSingleton().create("MoanLisa-Big.font");
+	CEGUI::FontManager::getSingleton().create("MoanLisa-Small.font");
 }
 
 MainMenuScene::~MainMenuScene()
@@ -63,23 +66,26 @@ MainMenuScene::~MainMenuScene()
 void
 MainMenuScene::enter()
 {
+	_container = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "Sheet");
+
 	_windowBackground = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage");
 	_windowBackground->setProperty("Image", "set:Menus image:Main");
 	_windowBackground->setProperty("FrameEnabled", "False");
 
-	_optionsMap[MainMenuOption::PLAY] = _createOptionWindow("PLAY", 100, 80);
-	_optionsMap[MainMenuOption::RECORDS] = _createOptionWindow("HIGH SCORES", 100, 80);
-	_optionsMap[MainMenuOption::OPTIONS] = _createOptionWindow("OPTIONS", 100, 80);
-	_optionsMap[MainMenuOption::HELP] = _createOptionWindow("HELP", 100, 80);
-	_optionsMap[MainMenuOption::EXIT] = _createOptionWindow("EXIT", 100, 80);
+	_container->addChildWindow(_windowBackground);
+
+	_optionsMap[MainMenuOption::PLAY] = _createOptionWindow("PLAY", _configValue<std::string>("font_big"), _configValue<int>("play_x"), _configValue<int>("play_y"));
+	_optionsMap[MainMenuOption::OPTIONS] = _createOptionWindow("OPTIONS", _configValue<std::string>("font_small"),  _configValue<int>("options_x"), _configValue<int>("options_y"));
+	_optionsMap[MainMenuOption::TEAM] = _createOptionWindow("TEAM", _configValue<std::string>("font_small"),  _configValue<int>("help_x"), _configValue<int>("help_y"));
+	_optionsMap[MainMenuOption::EXIT] = _createOptionWindow("EXIT", _configValue<std::string>("font_small"),  _configValue<int>("exit_x"), _configValue<int>("exit_y"));
 
 	for (std::map<MainMenuOption::Option, CEGUI::Window *>::iterator it =
 		_optionsMap.begin(); it != _optionsMap.end(); it++) {
 
-		_windowBackground->addChildWindow(it->second);
+		_container->addChildWindow(it->second);
 	}
 
-	CEGUI::System::getSingletonPtr()->setGUISheet(_windowBackground);
+	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
 	_setCurrentOption(MainMenuOption::PLAY);
 }
 
@@ -90,17 +96,14 @@ MainMenuScene::_processCurrentOption()
 		case MainMenuOption::PLAY:
 			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::GAME);
 			break;
-		case MainMenuOption::RECORDS:
-			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_RECORDS);
-			break;
 		case MainMenuOption::OPTIONS:
 			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_OPTIONS);
 			break;
-		case MainMenuOption::HELP:
-			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_HELP);
+		case MainMenuOption::TEAM:
+			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_TEAM);
 			break;
 		case MainMenuOption::EXIT:
-			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::EXIT);
+			_exit = true;
 			break;
 	}
 }
@@ -124,19 +127,32 @@ MainMenuScene::resume()
 }
 
 bool
+MainMenuScene::frameStarted(const Ogre::FrameEvent& event)
+{
+	return !_exit;
+}
+
+bool
 MainMenuScene::keyPressed(const OIS::KeyEvent &event)
 {
 	switch(event.key) {
 
+		case OIS::KC_LEFT:
 		case OIS::KC_DOWN:
 			{
-				MainMenuOption::Option newOption = static_cast<MainMenuOption::Option>(_currentOption - 1);
-				if (newOption < 0)
-					newOption = static_cast<MainMenuOption::Option>(_optionsMap.size());
+				MainMenuOption::Option newOption;
+
+				if (_currentOption == 0) {
+					newOption = static_cast<MainMenuOption::Option>(_optionsMap.size() - 1);
+				} else {
+					newOption = static_cast<MainMenuOption::Option>(_currentOption - 1);
+				}
+
 				_setCurrentOption(newOption);
 			}
 			break;
 
+		case OIS::KC_RIGHT:
 		case OIS::KC_UP:
 			{
 				MainMenuOption::Option newOption = static_cast<MainMenuOption::Option>((_currentOption + 1) % _optionsMap.size());

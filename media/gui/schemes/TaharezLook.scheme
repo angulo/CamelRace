@@ -2,9 +2,8 @@
 <GUIScheme Name="TaharezLook">
 	<Imageset Filename="TaharezLook.imageset" />
 	<Imageset Filename="Menus.imageset" />
-	<!--
-		<Font Filename="Carnevalee-10.font" />
-	-->
+	<Font Filename="MoanLisa-Big.font" />
+	<Font Filename="MoanLisa-Small.font" />
 	<LookNFeel Filename="TaharezLook.looknfeel" />
 	<WindowRendererSet Filename="CEGUIFalagardWRBase" />
 	<FalagardMapping WindowType="TaharezLook/Button"      TargetType="CEGUI/PushButton"  Renderer="Falagard/Button"       LookNFeel="TaharezLook/Button" />

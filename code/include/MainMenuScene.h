@@ -30,10 +30,9 @@ namespace CamelRace {
 
 		enum Option {
 			PLAY = 0,
-			RECORDS = 1,
-			OPTIONS = 2,
-			HELP = 3,
-			EXIT = 4
+			OPTIONS = 1,
+			TEAM = 2,
+			EXIT = 3
 		};
 	};
 
@@ -42,12 +41,14 @@ namespace CamelRace {
 		private:
 			
 			CEGUI::Window *_windowBackground;
+			CEGUI::Window *_container;
 
 			std::map<MainMenuOption::Option, CEGUI::Window *> _optionsMap;
 			MainMenuOption::Option _currentOption;
+			bool _exit;
 
 			void _setCurrentOption(MainMenuOption::Option option);
-			CEGUI::Window * _createOptionWindow(const std::string &text, const int &x, const int &y);
+			CEGUI::Window * _createOptionWindow(const std::string &text, const std::string &font, const int &x, const int &y);
 			void _processCurrentOption();
 
 		public:
@@ -60,6 +61,7 @@ namespace CamelRace {
 			void pause();
 			void resume();
 
+			bool frameStarted(const Ogre::FrameEvent& event);
 			bool keyPressed(const OIS::KeyEvent &event);
 	};
 };

@@ -58,41 +58,41 @@ GameScene::resume()
 bool
 GameScene::frameStarted(const Ogre::FrameEvent& event)
 {
-
+	return true;
 }
 
 bool
 GameScene::frameEnded(const Ogre::FrameEvent& event)
 {
-
+	return true;
 }
 
 bool
 GameScene::keyPressed(const OIS::KeyEvent& event)
 {
-
+	return true;
 }
 
 bool
 GameScene::keyReleased(const OIS::KeyEvent& event)
 {
-
+	return true;
 }
 
 bool
 GameScene::mouseMoved(const OIS::MouseEvent& event)
 {
-
+	return true;
 }
 
 bool
 GameScene::mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId)
 {
-
+	return true;
 }
 
 bool
 GameScene::mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId)
 {
-
+	return true;
 }

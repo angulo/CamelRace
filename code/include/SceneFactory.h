@@ -29,11 +29,9 @@ namespace CamelRace {
 	namespace Scene {
 		enum { 
 			MENU_MAIN = 0,
-			MENU_RECORDS = 1,
-			MENU_OPTIONS = 2,
-			MENU_HELP = 3,
-			EXIT = 4,
-			GAME = 5
+			MENU_OPTIONS = 1,
+			MENU_TEAM = 2,
+			GAME = 3
 		};
 	};
 
