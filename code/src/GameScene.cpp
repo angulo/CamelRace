@@ -20,6 +20,56 @@
 
 using namespace CamelRace;
 
+void
+GameScene::_createCircuit()
+{
+	// Cameras
+	_topCamera = _sceneManager->createCamera("TopCamera");
+	_carCamera = _sceneManager->createCamera("CarCamera");
+
+	_topCamera->setPosition(10, 10, 10);
+	_topCamera->lookAt(0, 0, 0);
+
+	_topCamera->setNearClipDistance(10);
+	_topCamera->setFarClipDistance(250);
+	_topCamera->setFOVy(Ogre::Degree(90));
+
+	Ogre::SceneNode *topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
+	topCameraNode->attachObject(_topCamera);
+
+	_sceneManager->getRootSceneNode()->addChild(topCameraNode);
+
+	Ogre::Viewport *viewport;
+	Ogre::RenderWindow *renderWindow = Ogre::Root::getSingletonPtr()->getAutoCreatedWindow();
+
+	if (renderWindow->getNumViewports() > 0) {
+		viewport = renderWindow->getViewport(0);
+		viewport->setCamera(_topCamera);
+	} else {
+		viewport = renderWindow->addViewport(_topCamera);
+	}
+
+	_topCamera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
+		Ogre::Real(viewport->getActualHeight()));
+	
+	//Lights
+	_sceneManager->setAmbientLight(Ogre::ColourValue(1, 1, 1));
+	_sceneManager->createLight("Light")->setPosition(30, 10, 10);
+
+	// Plane
+	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::PLANE));
+
+	builder->castShadows(true)
+		->parent(_sceneManager->getRootSceneNode())
+		->position(Ogre::Vector3(0, 0, 0))
+		->buildNode();
+}
+
+void
+GameScene::_createScene()
+{
+	_createCircuit();
+}
 
 GameScene::GameScene()
 {
@@ -34,7 +84,7 @@ GameScene::~GameScene()
 void
 GameScene::enter()
 {
-
+	_createScene();
 }
 
 void

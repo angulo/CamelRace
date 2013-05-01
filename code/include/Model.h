@@ -1,5 +1,5 @@
 /* 
- * main.cpp -- Main file of the project with system initialization
+ * Model.h -- model ids definition and modelfactory initializing
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,27 +16,21 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _MODEL_H_
+#define _MODEL_H_
+
 #include <OGF/OGF.h>
 
-#include "Model.h"
-#include "SceneFactory.h"
-#include "UIConfig.h"
+namespace CamelRace {
+	
+	namespace Model {
 
-int
-main(int argc, char **argv)
-{
-	OGF::ISceneFactory *sceneFactory = new CamelRace::SceneFactory();
+		enum ModelList {
+			PLANE
+		};
 
-	if (!OGF::Bootstrap::getSingletonPtr()->init("resources.cfg", APPLICATION_WINDOW_NAME, sceneFactory, CamelRace::Scene::MENU_MAIN)) {
-		return 1;
-	}
+		OGF::ModelMap getModelMap();
+	};
+};
 
-	CEGUI::SchemeManager::getSingletonPtr()->create("TaharezLook.scheme");
-
-	OGF::ModelFactory::getSingletonPtr()->initialize(CamelRace::Model::getModelMap());
-
-	OGF::Bootstrap::getSingletonPtr()->run();
-	OGF::Bootstrap::getSingletonPtr()->shutdown();
-
-	return 0;
-}
+#endif

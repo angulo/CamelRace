@@ -13,6 +13,8 @@ AC_PROG_CXX
 LT_INIT
 
 PKG_CHECK_MODULES(OGF, [OGF])
+PKG_CHECK_MODULES(OgreBullet, [OgreBullet])
+PKG_CHECK_MODULES(bullet, [bullet])
 
 AC_OUTPUT([
 	Makefile

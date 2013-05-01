@@ -20,13 +20,29 @@
 #define _GAME_SCENE_H_
 
 #include <OGF/OGF.h>
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <Shapes/OgreBulletCollisionsCompoundShape.h>
 
+#include <OgreBulletDynamicsWorld.h>
+#include <OgreBulletDynamicsRigidBody.h>
+
+#include <Constraints/OgreBulletDynamicsRaycastVehicle.h>
+
+#include "Model.h"
 #include "SceneFactory.h"
 #include "UIConfig.h"
 
 namespace CamelRace {
 	
 	class GameScene : public OGF::Scene {
+		
+		protected:
+			
+			Ogre::Camera *_topCamera;
+			Ogre::Camera *_carCamera;
+
+			void _createCircuit();
+			void _createScene();
 		
 		public:
 			

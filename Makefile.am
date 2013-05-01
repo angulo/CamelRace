@@ -1,4 +1,4 @@
-SUBDIRS = code
+SUBDIRS = code media/models
 
 DIST_SUBDIRS = code
 
