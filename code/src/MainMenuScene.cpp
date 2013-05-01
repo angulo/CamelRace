@@ -66,7 +66,7 @@ MainMenuScene::~MainMenuScene()
 void
 MainMenuScene::enter()
 {
-	_container = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "Sheet");
+	_container = CEGUI::WindowManager::getSingleton().createWindow("DefaultWindow", "MainMenuContainer");
 
 	_windowBackground = CEGUI::WindowManager::getSingleton().createWindow("TaharezLook/StaticImage");
 	_windowBackground->setProperty("Image", "set:Menus image:Main");
@@ -111,19 +111,20 @@ MainMenuScene::_processCurrentOption()
 void
 MainMenuScene::exit()
 {
-
+	CEGUI::WindowManager::getSingletonPtr()->destroyWindow(_container);
 }
 
 void
 MainMenuScene::pause()
 {
-	_windowBackground->setVisible(false);
+	_container->setVisible(false);
 }
 
 void
 MainMenuScene::resume()
 {
-	_windowBackground->setVisible(true);
+	CEGUI::System::getSingletonPtr()->setGUISheet(_container);
+	_container->setVisible(true);
 }
 
 bool

@@ -18,6 +18,7 @@ CamelRace_SOURCES = \
 	src/main.cpp \
 	src/GameScene.cpp \
 	src/MainMenuScene.cpp \
-	src/SceneFactory.cpp
+	src/SceneFactory.cpp \
+	src/TeamMenuScene.cpp
 
 CamelRace_LDADD = $(OGF_LIBS)

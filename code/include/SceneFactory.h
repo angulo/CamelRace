@@ -23,6 +23,7 @@
 
 #include "GameScene.h"
 #include "MainMenuScene.h"
+#include "TeamMenuScene.h"
 
 namespace CamelRace {
 

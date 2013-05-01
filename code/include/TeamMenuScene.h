@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.cpp -- Scene factory implementation file
+ * TeamMenuScene.h -- Team menu scene header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,28 +16,35 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef _TEAM_MENU_SCENE_H_
+#define _TEAM_MENU_SCENE_H_
+
+#include <OGF/OGF.h>
+
 #include "SceneFactory.h"
+#include "UIConfig.h"
 
-using namespace CamelRace;
+namespace CamelRace {
+	
+	class TeamMenuScene : public OGF::Scene {
+		
+		private:
+			
+			CEGUI::Window *_windowBackground;
+			CEGUI::Window *_container;
 
-OGF::Scene *
-SceneFactory::create(OGF::SceneId sceneId)
-{
-	OGF::Scene *scene = NULL;
+		public:
+			
+			TeamMenuScene();
+			~TeamMenuScene();
 
-	switch(sceneId) {
-		case Scene::GAME:
-			scene = new GameScene();
-			break;
-		case Scene::MENU_MAIN:
-			scene = new MainMenuScene();
-			break;
-		case Scene::MENU_TEAM:
-			scene = new TeamMenuScene();
-			break;
-		default:
-			break;
-	}
+			void enter();
+			void exit();
+			void pause();
+			void resume();
 
-	return scene;
-}
+			bool keyPressed(const OIS::KeyEvent &event);
+	};
+};
+
+#endif
