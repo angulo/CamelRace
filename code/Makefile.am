@@ -12,6 +12,8 @@ AM_CFLAGS =\
 	 -Wall\
 	 -g
 
+AM_LDFLAGS = -I /usr/local/lib $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
+
 bin_PROGRAMS = CamelRace
 
 CamelRace_SOURCES = \
@@ -22,4 +24,5 @@ CamelRace_SOURCES = \
 	src/SceneFactory.cpp \
 	src/TeamMenuScene.cpp
 
+CamelRace_LDFLAGS = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)
 CamelRace_LDADD = $(OGF_LIBS) $(OgreBullet_LIBS) $(bullet_LIBS)

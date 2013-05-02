@@ -27,7 +27,7 @@ GameScene::_createCircuit()
 	_topCamera = _sceneManager->createCamera("TopCamera");
 	_carCamera = _sceneManager->createCamera("CarCamera");
 
-	_topCamera->setPosition(10, 10, 10);
+	_topCamera->setPosition(_configValue<float>("camera_x"), _configValue<float>("camera_y"), _configValue<float>("camera_z"));
 	_topCamera->lookAt(0, 0, 0);
 
 	_topCamera->setNearClipDistance(10);
@@ -66,14 +66,35 @@ GameScene::_createCircuit()
 }
 
 void
+GameScene::_createDynamicWorld()
+{
+	_debugDrawer = new OgreBulletCollisions::DebugDrawer();
+	_debugDrawer->setDrawWireframe(true);	 
+	Ogre::SceneNode *node = _sceneManager->getRootSceneNode()->
+	createChildSceneNode("debugNode", Ogre::Vector3::ZERO);
+	node->attachObject(static_cast <Ogre::SimpleRenderable *>(_debugDrawer));
+
+	Ogre::AxisAlignedBox worldBounds = Ogre::AxisAlignedBox(
+		Ogre::Vector3(-100, -100, -100), 
+		Ogre::Vector3(100,  100,  100)
+	);
+
+	Ogre::Vector3 gravity(0, -9.8, 0);
+
+	_world = new OgreBulletDynamics::DynamicsWorld(_sceneManager, worldBounds, gravity);
+	_world->setDebugDrawer (_debugDrawer);
+}
+
+void
 GameScene::_createScene()
 {
 	_createCircuit();
+	_createDynamicWorld();
 }
 
 GameScene::GameScene()
 {
-
+	_initConfigReader("scenes/game.cfg");
 }
 
 GameScene::~GameScene()

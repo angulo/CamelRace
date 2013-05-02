@@ -20,8 +20,11 @@
 #define _GAME_SCENE_H_
 
 #include <OGF/OGF.h>
+
+#include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Shapes/OgreBulletCollisionsCompoundShape.h>
+#include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
 
 #include <OgreBulletDynamicsWorld.h>
 #include <OgreBulletDynamicsRigidBody.h>
@@ -41,7 +44,11 @@ namespace CamelRace {
 			Ogre::Camera *_topCamera;
 			Ogre::Camera *_carCamera;
 
+			OgreBulletCollisions::DebugDrawer * _debugDrawer;
+			OgreBulletDynamics::DynamicsWorld * _world;
+
 			void _createCircuit();
+			void _createDynamicWorld();
 			void _createScene();
 		
 		public:
