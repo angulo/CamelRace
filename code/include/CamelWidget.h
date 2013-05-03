@@ -1,5 +1,5 @@
 /* 
- * GameScene.h -- Game scene header file
+ * CamelWidget.h -- Camel element header file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,12 +16,11 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _GAME_SCENE_H_
-#define _GAME_SCENE_H_
+#ifndef _CAMEL_WIDGET_H_
+#define _CAMEL_WIDGET_H_
 
 #include <OGF/OGF.h>
 
-#include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Shapes/OgreBulletCollisionsCompoundShape.h>
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
@@ -29,32 +28,19 @@
 #include <OgreBulletDynamicsWorld.h>
 #include <OgreBulletDynamicsRigidBody.h>
 
-#include "CamelWidget.h"
+#include <Constraints/OgreBulletDynamicsRaycastVehicle.h>
+
 #include "Model.h"
-#include "SceneFactory.h"
 #include "UIConfig.h"
 
 namespace CamelRace {
 	
-	class GameScene : public OGF::Scene {
-		
-		protected:
-			
-			Ogre::Camera *_topCamera;
-
-			OgreBulletCollisions::DebugDrawer * _debugDrawer;
-			OgreBulletDynamics::DynamicsWorld * _world;
-
-			CamelWidget *_camel;
-
-			void _createCircuit();
-			void _createDynamicWorld();
-			void _createScene();
+	class CamelWidget : public OGF::Scene {
 		
 		public:
 			
-			GameScene();
-			~GameScene();
+			CamelWidget();
+			~CamelWidget();
 
 			void enter();
 			void exit();
@@ -66,10 +52,6 @@ namespace CamelRace {
 
 			bool keyPressed(const OIS::KeyEvent& event);
 			bool keyReleased(const OIS::KeyEvent& event);
-
-			bool mouseMoved(const OIS::MouseEvent& event);
-			bool mousePressed(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId);
-			bool mouseReleased(const OIS::MouseEvent& event, OIS::MouseButtonID buttonId);
 	};
 };
 

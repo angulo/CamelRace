@@ -25,7 +25,6 @@ GameScene::_createCircuit()
 {
 	// Cameras
 	_topCamera = _sceneManager->createCamera("TopCamera");
-	_carCamera = _sceneManager->createCamera("CarCamera");
 
 	_topCamera->setPosition(_configValue<float>("camera_x"), _configValue<float>("camera_y"), _configValue<float>("camera_z"));
 	_topCamera->lookAt(0, 0, 0);
@@ -70,8 +69,9 @@ GameScene::_createDynamicWorld()
 {
 	_debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	_debugDrawer->setDrawWireframe(true);	 
+
 	Ogre::SceneNode *node = _sceneManager->getRootSceneNode()->
-	createChildSceneNode("debugNode", Ogre::Vector3::ZERO);
+		createChildSceneNode("debugNode", Ogre::Vector3::ZERO);
 	node->attachObject(static_cast <Ogre::SimpleRenderable *>(_debugDrawer));
 
 	Ogre::AxisAlignedBox worldBounds = Ogre::AxisAlignedBox(
@@ -83,6 +83,15 @@ GameScene::_createDynamicWorld()
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneManager, worldBounds, gravity);
 	_world->setDebugDrawer (_debugDrawer);
+
+
+	// Create the collision shape for the circuit
+	OgreBulletCollisions::CollisionShape *planeShape = new OgreBulletCollisions::StaticPlaneCollisionShape(
+		Ogre::Vector3(0, 1, 0), 0
+	);
+
+	OgreBulletDynamics::RigidBody *rigidBodyPlane = new OgreBulletDynamics::RigidBody("rigidBodyPlane", _world);
+	rigidBodyPlane->setStaticShape(planeShape, 0.1, 0.8); 
 }
 
 void
@@ -90,6 +99,7 @@ GameScene::_createScene()
 {
 	_createCircuit();
 	_createDynamicWorld();
+	_camel = new CamelWidget();
 }
 
 GameScene::GameScene()
@@ -129,12 +139,14 @@ GameScene::resume()
 bool
 GameScene::frameStarted(const Ogre::FrameEvent& event)
 {
+	_world->stepSimulation(event.timeSinceLastFrame);
 	return true;
 }
 
 bool
 GameScene::frameEnded(const Ogre::FrameEvent& event)
 {
+	_world->stepSimulation(event.timeSinceLastFrame);
 	return true;
 }
 

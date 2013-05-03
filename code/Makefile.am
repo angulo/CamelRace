@@ -18,6 +18,7 @@ bin_PROGRAMS = CamelRace
 
 CamelRace_SOURCES = \
 	src/main.cpp \
+	src/CamelWidget.cpp \
 	src/GameScene.cpp \
 	src/MainMenuScene.cpp \
 	src/Model.cpp \

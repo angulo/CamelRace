@@ -1,5 +1,5 @@
 /* 
- * SceneFactory.h -- Scene factory header file
+ * CamelWidget.cpp -- Camel element implementation file
  *
  * Copyright (C) 2013 Javier Angulo Lucerón <javier.angulo1@gmail.com>
  * 
@@ -16,33 +16,65 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _SCENE_FACTORY_H_
-#define _SCENE_FACTORY_H_
-
-#include <OGF/OGF.h>
-
 #include "CamelWidget.h"
-#include "GameScene.h"
-#include "MainMenuScene.h"
-#include "TeamMenuScene.h"
 
-namespace CamelRace {
+using namespace CamelRace;
 
-	namespace Scene {
-		enum { 
-			MENU_MAIN = 0,
-			MENU_OPTIONS = 1,
-			MENU_TEAM = 2,
-			GAME = 3
-		};
-	};
+CamelWidget::CamelWidget()
+{
 
-	class SceneFactory : public OGF::ISceneFactory {
-		
-		public:
+}
 
-			OGF::Scene * create(OGF::SceneId sceneId);
-	};
-};
+CamelWidget::~CamelWidget()
+{
 
-#endif
+}
+
+void
+CamelWidget::enter()
+{
+	
+
+}
+
+void
+CamelWidget::exit()
+{
+
+}
+
+void
+CamelWidget::pause()
+{
+
+}
+
+void
+CamelWidget::resume()
+{
+
+}
+
+bool
+CamelWidget::frameStarted(const Ogre::FrameEvent& event)
+{
+	return true;
+}
+
+bool
+CamelWidget::frameEnded(const Ogre::FrameEvent& event)
+{
+	return true;
+}
+
+bool
+CamelWidget::keyPressed(const OIS::KeyEvent& event)
+{
+	return true;
+}
+
+bool
+CamelWidget::keyReleased(const OIS::KeyEvent& event)
+{
+	return true;
+}
