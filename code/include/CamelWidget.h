@@ -40,6 +40,10 @@ namespace CamelRace {
 		protected:
 
 			OgreBulletDynamics::DynamicsWorld *_world;
+			OgreBulletDynamics::RaycastVehicle *_vehicle;
+
+			void _updateDirection(const Ogre::FrameEvent& event);
+			void _updatePower(const Ogre::FrameEvent& event);
 
 		public:
 			
