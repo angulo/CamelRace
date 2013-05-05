@@ -46,6 +46,7 @@ namespace CamelRace {
 			OgreBulletDynamics::DynamicsWorld * _world;
 
 			CamelWidget *_camel;
+			OGF::ChildId _camelChildId;
 
 			void _createCircuit();
 			void _createDynamicWorld();

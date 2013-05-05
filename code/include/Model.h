@@ -26,7 +26,9 @@ namespace CamelRace {
 	namespace Model {
 
 		enum ModelList {
-			PLANE
+			CHASSIS,
+			PLANE,
+			WHEEL
 		};
 
 		OGF::ModelMap getModelMap();

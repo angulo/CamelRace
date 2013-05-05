@@ -61,6 +61,7 @@ GameScene::_createCircuit()
 	builder->castShadows(true)
 		->parent(_sceneManager->getRootSceneNode())
 		->position(Ogre::Vector3(0, 0, 0))
+		->scale(Ogre::Vector3(3, 0, 3))
 		->buildNode();
 }
 
@@ -75,15 +76,15 @@ GameScene::_createDynamicWorld()
 	node->attachObject(static_cast <Ogre::SimpleRenderable *>(_debugDrawer));
 
 	Ogre::AxisAlignedBox worldBounds = Ogre::AxisAlignedBox(
-		Ogre::Vector3(-100, -100, -100), 
-		Ogre::Vector3(100,  100,  100)
+		Ogre::Vector3(-1000, -1000, -1000), 
+		Ogre::Vector3(1000,  1000,  1000)
 	);
 
 	Ogre::Vector3 gravity(0, -9.8, 0);
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneManager, worldBounds, gravity);
-	_world->setDebugDrawer (_debugDrawer);
-
+	_world->setDebugDrawer(_debugDrawer);
+	_world->setShowDebugShapes(true);
 
 	// Create the collision shape for the circuit
 	OgreBulletCollisions::CollisionShape *planeShape = new OgreBulletCollisions::StaticPlaneCollisionShape(
@@ -99,7 +100,8 @@ GameScene::_createScene()
 {
 	_createCircuit();
 	_createDynamicWorld();
-	_camel = new CamelWidget();
+	_camel = new CamelWidget(_sceneManager, _world);
+	_camelChildId = OGF::SceneController::getSingletonPtr()->addChild(_camel);
 }
 
 GameScene::GameScene()

@@ -20,7 +20,8 @@
 
 using namespace CamelRace;
 
-CamelWidget::CamelWidget()
+CamelWidget::CamelWidget(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *world)
+	: Scene(sceneManager), _world(world)
 {
 
 }
@@ -33,8 +34,72 @@ CamelWidget::~CamelWidget()
 void
 CamelWidget::enter()
 {
-	
+	const Ogre::Vector3 chassisShift(0, 1.0, 0);
+	float connectionHeight = 0.7f;
+	float gWheelRadius = 0.5f;
+	float gWheelWidth = 0.4f;
+	float gWheelFriction = 1e30f;
+	float gRollInfluence = 0.1f;
+	float gSuspensionRestLength = 0.6;
+	float gEngineForce = 1000.0;
 
+	Ogre::SceneNode *node = _sceneManager->getRootSceneNode()->createChildSceneNode ();
+
+	OGF::ModelBuilderPtr chassisBuilder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::CHASSIS));
+
+	Ogre::SceneNode *chassisNode = chassisBuilder->castShadows(true)
+		->parent(node)
+		->position(chassisShift)
+		->buildNode();
+	
+	OgreBulletCollisions::BoxCollisionShape *chassisShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(1.f, 0.75f, 2.1f));
+	OgreBulletCollisions::CompoundCollisionShape *compound = new OgreBulletCollisions::CompoundCollisionShape();
+
+	compound->addChildShape(chassisShape, chassisShift); 
+
+	OgreBulletDynamics::WheeledRigidBody  *carChassis = new  OgreBulletDynamics::WheeledRigidBody("carChassis", _world);
+
+	carChassis->setShape(node, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 0, -15), Ogre::Quaternion::IDENTITY);
+	carChassis->setDamping(0.2, 0.2);
+	carChassis->disableDeactivation();
+
+	OgreBulletDynamics::VehicleTuning *tuning = new OgreBulletDynamics::VehicleTuning(20.2, 4.4, 2.3, 500.0, 10.5);
+
+	OgreBulletDynamics::VehicleRayCaster *vehicleRayCaster = new OgreBulletDynamics::VehicleRayCaster(_world);
+
+	OgreBulletDynamics::RaycastVehicle *vehicle = new OgreBulletDynamics::RaycastVehicle(carChassis, tuning, vehicleRayCaster);
+
+	vehicle->setCoordinateSystem(0, 1, 2);
+
+	Ogre::Entity *wheelEntities[4];
+	Ogre::SceneNode *wheelNodes[4];
+
+	OGF::ModelBuilderPtr wheelBuilder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::WHEEL));
+
+	wheelBuilder->castShadows(true)
+		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode ());
+
+	for (size_t i = 0; i < 4; i++) {
+		wheelNodes[i] = wheelBuilder->buildNode();
+	}
+
+	bool isFrontWheel = true;
+	Ogre::Vector3 connectionPoint(1 - (0.3 * gWheelWidth), connectionHeight, 2 - gWheelRadius);
+	Ogre::Vector3 wheelDirectionCS0(0, -1, 0);
+	Ogre::Vector3 wheelAxleCS(-1, 0, 0);
+
+	vehicle->addWheel(wheelNodes[0], connectionPoint, wheelDirectionCS0, wheelAxleCS, gSuspensionRestLength, gWheelRadius, isFrontWheel, gWheelFriction, gRollInfluence);
+
+	connectionPoint = Ogre::Vector3(-1 + (0.3 * gWheelWidth), connectionHeight, 2 - gWheelRadius);
+	vehicle->addWheel(wheelNodes[1], connectionPoint, wheelDirectionCS0, wheelAxleCS, gSuspensionRestLength, gWheelRadius, isFrontWheel, gWheelFriction, gRollInfluence);
+
+	isFrontWheel = false;
+
+	connectionPoint = Ogre::Vector3(-1 + (0.3 * gWheelWidth), connectionHeight, -2 + gWheelRadius);
+	vehicle->addWheel(wheelNodes[2], connectionPoint, wheelDirectionCS0, wheelAxleCS, gSuspensionRestLength, gWheelRadius, isFrontWheel, gWheelFriction, gRollInfluence);
+
+	connectionPoint = Ogre::Vector3(1 - (0.3 * gWheelWidth), connectionHeight, -2 + gWheelRadius);
+	vehicle->addWheel(wheelNodes[3], connectionPoint, wheelDirectionCS0, wheelAxleCS, gSuspensionRestLength, gWheelRadius, isFrontWheel, gWheelFriction, gRollInfluence);
 }
 
 void

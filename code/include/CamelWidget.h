@@ -36,10 +36,14 @@
 namespace CamelRace {
 	
 	class CamelWidget : public OGF::Scene {
-		
+
+		protected:
+
+			OgreBulletDynamics::DynamicsWorld *_world;
+
 		public:
 			
-			CamelWidget();
+			CamelWidget(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld * world);
 			~CamelWidget();
 
 			void enter();
