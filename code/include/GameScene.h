@@ -24,7 +24,11 @@
 #include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Shapes/OgreBulletCollisionsCompoundShape.h>
+#include "Shapes/OgreBulletCollisionsConvexHullShape.h"
 #include <Shapes/OgreBulletCollisionsStaticPlaneShape.h>
+#include "Shapes/OgreBulletCollisionsTrimeshShape.h"		
+
+#include <Utils/OgreBulletCollisionsMeshToShapeConverter.h>
 
 #include <OgreBulletDynamicsWorld.h>
 #include <OgreBulletDynamicsRigidBody.h>

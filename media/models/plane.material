@@ -1,3 +1,5 @@
+// plane genrated by blender2ogre 0.5.9
+
 material plane 
 {
     receive_shadows on 
