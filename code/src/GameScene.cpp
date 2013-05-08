@@ -79,25 +79,52 @@ GameScene::_createDynamicWorld()
 	_world->setShowDebugShapes(false);
 
 	// Circuit
+	Ogre::SceneNode *circuitNode = _sceneManager->getRootSceneNode()->createChildSceneNode();
+
 	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::PLANE));
-
-	Ogre::SceneNode *planeNode = builder->castShadows(true)
-		->parent(_sceneManager->getRootSceneNode())
-		->position(Ogre::Vector3(0, 0, 0))
-		->buildNode();
-
-	Ogre::Entity *planeEntity = static_cast<Ogre::Entity *>(planeNode->getAttachedObject(0));
+	builder->castShadows(false)
+		->parent(circuitNode);
 
 	OgreBulletCollisions::StaticMeshToShapeConverter *trimeshConverter = NULL; 
-	OgreBulletCollisions::CollisionShape *bodyShape = NULL;
 	OgreBulletDynamics::RigidBody *rigidBody = NULL;
 
-	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter(planeEntity);
-	bodyShape = trimeshConverter->createConvex();
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::CIRCUIT_INTERN))
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
+	rigidBody = new OgreBulletDynamics::RigidBody("circuitIntern", _world);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
 	delete trimeshConverter;
 
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::CIRCUIT_EXTERN))
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
+	rigidBody = new OgreBulletDynamics::RigidBody("circuitExtern", _world);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+
+	delete trimeshConverter;
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath(OGF::ModelFactory::getSingletonPtr()->getPath(Model::PLANE))
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
 	rigidBody = new OgreBulletDynamics::RigidBody("circuit", _world);
-	rigidBody->setStaticShape(planeNode, bodyShape, 0.1, 0.8, Ogre::Vector3(0, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	delete trimeshConverter;
+
 }
 
 void

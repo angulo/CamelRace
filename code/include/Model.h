@@ -27,6 +27,8 @@ namespace CamelRace {
 
 		enum ModelList {
 			CHASSIS,
+			CIRCUIT_INTERN,
+			CIRCUIT_EXTERN,
 			PLANE,
 			WHEEL
 		};

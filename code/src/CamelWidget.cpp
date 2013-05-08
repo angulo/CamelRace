@@ -98,7 +98,7 @@ CamelWidget::enter()
 
 	OgreBulletDynamics::WheeledRigidBody  *carChassis = new  OgreBulletDynamics::WheeledRigidBody("carChassis", _world);
 
-	carChassis->setShape(node, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 0, -15), Ogre::Quaternion::IDENTITY);
+	carChassis->setShape(node, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 50, 0), Ogre::Quaternion::IDENTITY);
 	carChassis->setDamping(0.2, 0.2);
 	carChassis->disableDeactivation();
 
