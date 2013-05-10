@@ -149,7 +149,19 @@ GameScene::_createDynamicWorld()
 
 	rigidBody = new OgreBulletDynamics::RigidBody("stones", _world);
 	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+
 	delete trimeshConverter;
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath("fence.mesh")
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
+	rigidBody = new OgreBulletDynamics::RigidBody("fence", _world);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
 }
 
 void
