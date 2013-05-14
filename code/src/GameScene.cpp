@@ -23,20 +23,22 @@ using namespace CamelRace;
 void
 GameScene::_createCircuit()
 {
+	// Sky
+	//_sceneManager->setSkyDome(true, "sky", 20, 5, 200, false);
+
 	// Cameras
 	_topCamera = _sceneManager->createCamera("TopCamera");
 
 	_topCamera->setPosition(_configValue<float>("camera_x"), _configValue<float>("camera_y"), _configValue<float>("camera_z"));
 	_topCamera->lookAt(0, 0, 0);
 
-	_topCamera->setNearClipDistance(10);
-	_topCamera->setFarClipDistance(250);
+	_topCamera->setNearClipDistance(5);
+	_topCamera->setFarClipDistance(1000);
 	_topCamera->setFOVy(Ogre::Degree(90));
 
-	Ogre::SceneNode *topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
-	topCameraNode->attachObject(_topCamera);
-
-	_sceneManager->getRootSceneNode()->addChild(topCameraNode);
+	_topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
+	_topCameraNode->attachObject(_topCamera);
+	_topCameraNode->setInheritOrientation(false);
 
 	Ogre::Viewport *viewport;
 	Ogre::RenderWindow *renderWindow = Ogre::Root::getSingletonPtr()->getAutoCreatedWindow();
@@ -97,7 +99,7 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("circuitIntern", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 	delete trimeshConverter;
 
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
@@ -109,7 +111,7 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("circuitExtern", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
 	delete trimeshConverter;
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
@@ -122,7 +124,7 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("circuit", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
 	delete trimeshConverter;
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
@@ -135,7 +137,7 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("startLine", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
 	delete trimeshConverter;
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
@@ -148,7 +150,7 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("stones", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
 	delete trimeshConverter;
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
@@ -161,7 +163,34 @@ GameScene::_createDynamicWorld()
 	);
 
 	rigidBody = new OgreBulletDynamics::RigidBody("fence", _world);
-	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(-50, -10, 0), Ogre::Quaternion::IDENTITY);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+
+	delete trimeshConverter;
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath("palms.mesh")
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
+	rigidBody = new OgreBulletDynamics::RigidBody("palms", _world);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+	delete trimeshConverter;
+
+	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
+
+	trimeshConverter->addEntity(
+		static_cast<Ogre::Entity *>(
+			builder->modelPath("house.mesh")
+				->buildNode()->getAttachedObject(0)
+		)
+	);
+
+	rigidBody = new OgreBulletDynamics::RigidBody("house", _world);
+	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+	delete trimeshConverter;
 }
 
 void
@@ -171,6 +200,8 @@ GameScene::_createScene()
 	_createDynamicWorld();
 	_camel = new CamelWidget(_sceneManager, _world);
 	_camelChildId = OGF::SceneController::getSingletonPtr()->addChild(_camel);
+
+	_camel->getTrackingNode()->addChild(_topCameraNode);
 }
 
 GameScene::GameScene()
@@ -211,6 +242,14 @@ bool
 GameScene::frameStarted(const Ogre::FrameEvent& event)
 {
 	_world->stepSimulation(event.timeSinceLastFrame);
+
+	Ogre::Quaternion orientation = _camel->getTrackingNode()->getOrientation();
+	orientation.z = 0;
+	orientation.x = 0;
+	Ogre::SceneNode *s;
+	_topCameraNode->resetOrientation();
+	_topCameraNode->setOrientation(orientation);
+
 	return true;
 }
 
@@ -218,6 +257,7 @@ bool
 GameScene::frameEnded(const Ogre::FrameEvent& event)
 {
 	_world->stepSimulation(event.timeSinceLastFrame);
+
 	return true;
 }
 

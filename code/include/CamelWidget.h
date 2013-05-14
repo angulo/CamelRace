@@ -41,6 +41,7 @@ namespace CamelRace {
 
 			OgreBulletDynamics::DynamicsWorld *_world;
 			OgreBulletDynamics::RaycastVehicle *_vehicle;
+			Ogre::SceneNode *_trackingNode;
 
 			void _updateDirection(const Ogre::FrameEvent& event);
 			void _updatePower(const Ogre::FrameEvent& event);
@@ -49,6 +50,8 @@ namespace CamelRace {
 			
 			CamelWidget(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld * world);
 			~CamelWidget();
+
+			Ogre::SceneNode *getTrackingNode();
 
 			void enter();
 			void exit();

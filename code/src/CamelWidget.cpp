@@ -52,11 +52,11 @@ CamelWidget::_updatePower(const Ogre::FrameEvent& event)
 	_vehicle->applyEngineForce(0, 1);
 
 	if (keyboard->isKeyDown(OIS::KC_UP)) {
-		_vehicle->applyEngineForce(1000, 0);
-		_vehicle->applyEngineForce(1000, 1);
+		_vehicle->applyEngineForce(engineForce, 0);
+		_vehicle->applyEngineForce(engineForce, 1);
 	} else if (keyboard->isKeyDown(OIS::KC_DOWN)) {
-		_vehicle->applyEngineForce(-750, 0);
-		_vehicle->applyEngineForce(-750, 1);
+		_vehicle->applyEngineForce(-engineForce * 0.75, 0);
+		_vehicle->applyEngineForce(-engineForce * 0.75, 1);
 	}
 }
 
@@ -71,6 +71,12 @@ CamelWidget::~CamelWidget()
 
 }
 
+Ogre::SceneNode *
+CamelWidget::getTrackingNode()
+{
+	return _trackingNode;
+}
+
 void
 CamelWidget::enter()
 {
@@ -82,12 +88,12 @@ CamelWidget::enter()
 	float gRollInfluence = 0.1f;
 	float gSuspensionRestLength = 0.6;
 
-	Ogre::SceneNode *node = _sceneManager->getRootSceneNode()->createChildSceneNode ();
+	_trackingNode = _sceneManager->getRootSceneNode()->createChildSceneNode ();
 
 	OGF::ModelBuilderPtr chassisBuilder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::CHASSIS));
 
 	Ogre::SceneNode *chassisNode = chassisBuilder->castShadows(true)
-		->parent(node)
+		->parent(_trackingNode)
 		->position(chassisShift)
 		->buildNode();
 	
@@ -98,7 +104,7 @@ CamelWidget::enter()
 
 	OgreBulletDynamics::WheeledRigidBody  *carChassis = new  OgreBulletDynamics::WheeledRigidBody("carChassis", _world);
 
-	carChassis->setShape(node, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 50, 0), Ogre::Quaternion::IDENTITY);
+	carChassis->setShape(_trackingNode, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 12.75, 0), Ogre::Quaternion::IDENTITY);
 	carChassis->setDamping(0.2, 0.2);
 	carChassis->disableDeactivation();
 

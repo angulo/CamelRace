@@ -45,6 +45,7 @@ namespace CamelRace {
 		protected:
 			
 			Ogre::Camera *_topCamera;
+			Ogre::SceneNode *_topCameraNode;
 
 			OgreBulletCollisions::DebugDrawer * _debugDrawer;
 			OgreBulletDynamics::DynamicsWorld * _world;
