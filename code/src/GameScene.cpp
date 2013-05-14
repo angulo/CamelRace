@@ -24,7 +24,15 @@ void
 GameScene::_createCircuit()
 {
 	// Sky
-	//_sceneManager->setSkyDome(true, "sky", 20, 5, 200, false);
+	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager));
+
+	Ogre::Entity *skyEntity = builder->modelPath("sky_dome.mesh")
+		->buildEntity();
+	skyEntity->setMaterialName("sky");
+	
+	Ogre::SceneNode *skyNode = _sceneManager->getRootSceneNode()->createChildSceneNode ();
+	skyNode->attachObject(skyEntity);
+	skyNode->translate(0, -200, 0);
 
 	// Cameras
 	_topCamera = _sceneManager->createCamera("TopCamera");
@@ -32,9 +40,9 @@ GameScene::_createCircuit()
 	_topCamera->setPosition(_configValue<float>("camera_x"), _configValue<float>("camera_y"), _configValue<float>("camera_z"));
 	_topCamera->lookAt(0, 0, 0);
 
-	_topCamera->setNearClipDistance(5);
-	_topCamera->setFarClipDistance(1000);
-	_topCamera->setFOVy(Ogre::Degree(90));
+	_topCamera->setNearClipDistance(0.1);
+	_topCamera->setFarClipDistance(10000);
+	_topCamera->setFOVy(Ogre::Degree(75));
 
 	_topCameraNode = _sceneManager->createSceneNode("TopCameraNode");
 	_topCameraNode->attachObject(_topCamera);
@@ -243,6 +251,7 @@ GameScene::frameStarted(const Ogre::FrameEvent& event)
 {
 	_world->stepSimulation(event.timeSinceLastFrame);
 
+	// Prevent the orientation of the camel to change
 	Ogre::Quaternion orientation = _camel->getTrackingNode()->getOrientation();
 	orientation.z = 0;
 	orientation.x = 0;
