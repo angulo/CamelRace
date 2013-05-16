@@ -9,10 +9,10 @@ material fence
             texture_unit 
             {
                 texture wood.jpg
-                tex_address_mode clamp
-                scale 0.000001 0.000001
+                tex_address_mode wrap
+								scale 0.5 0.5
                 tex_coord_set 0
-                colour_op modulate
+                scroll_anim 0.0 0.0
             }
         }
     }

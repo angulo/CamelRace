@@ -28,13 +28,14 @@ CamelWidget::_updateDirection(const Ogre::FrameEvent& event)
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 	
 	if (keyboard->isKeyDown(OIS::KC_LEFT)) {
-		if (steering < 0.8)
-			steering += 0.01;
+		if (steering < 0.4)
+			steering += (event.timeSinceLastFrame * 0.15);
 	} else if (keyboard->isKeyDown(OIS::KC_RIGHT)) {
-		if (steering > -0.8)
-			steering -= 0.01;
+		if (steering > -0.4)
+			steering -= (event.timeSinceLastFrame * 0.15);
 	} else {
-		steering = steering > 0 ? steering - 0.01 : steering + 0.01;
+		steering = steering > 0 ? steering - (event.timeSinceLastFrame * 0.5) : 
+			steering + (event.timeSinceLastFrame * 0.5);
 	}
 
 	_vehicle->setSteeringValue(steering, 0); 
@@ -46,7 +47,7 @@ CamelWidget::_updatePower(const Ogre::FrameEvent& event)
 {
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 
-	float engineForce = 1000;
+	float engineForce = 2000;
 
 	_vehicle->applyEngineForce(0, 0);
 	_vehicle->applyEngineForce(0, 1);
@@ -84,7 +85,7 @@ CamelWidget::enter()
 	float connectionHeight = 0.7f;
 	float gWheelRadius = 0.5f;
 	float gWheelWidth = 0.4f;
-	float gWheelFriction = 1e30f;
+	float gWheelFriction = 0.8f;
 	float gRollInfluence = 0.1f;
 	float gSuspensionRestLength = 0.6;
 

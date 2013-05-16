@@ -23,6 +23,24 @@ using namespace CamelRace;
 void
 GameScene::_createCircuit()
 {
+	
+	//Lights
+	_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+	_sceneManager->setShadowTextureCount(2);
+	_sceneManager->setShadowTextureSize(512);
+
+	_sceneManager->setShadowColour(Ogre::ColourValue(0.5, 0.5, 0.5) );
+	_sceneManager->setAmbientLight(Ogre::ColourValue(0.7, 0.7, 0.7));
+	
+	Ogre::Light *sunLight = _sceneManager->createLight("Sun");
+	sunLight->setPosition(1000, 1000, 0);
+	sunLight->setType(Ogre::Light::LT_DIRECTIONAL);
+	sunLight->setDirection(1, -1, 0);
+	sunLight->setSpotlightInnerAngle(Ogre::Degree(25.0f));
+	sunLight->setSpotlightOuterAngle(Ogre::Degree(100.0f));
+	sunLight->setSpotlightFalloff(0.0);
+	sunLight->setCastShadows(true);
+
 	// Sky
 	OGF::ModelBuilderPtr builder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager));
 
@@ -60,11 +78,6 @@ GameScene::_createCircuit()
 
 	_topCamera->setAspectRatio(Ogre::Real(viewport->getActualWidth()) /
 		Ogre::Real(viewport->getActualHeight()));
-	
-	//Lights
-	_sceneManager->setAmbientLight(Ogre::ColourValue(1, 1, 1));
-	_sceneManager->createLight("Light")->setPosition(30, 10, 10);
-
 }
 
 void
@@ -86,7 +99,7 @@ GameScene::_createDynamicWorld()
 
 	_world = new OgreBulletDynamics::DynamicsWorld(_sceneManager, worldBounds, gravity);
 	_world->setDebugDrawer(_debugDrawer);
-	_world->setShowDebugShapes(false);
+	_world->setShowDebugShapes(true);
 
 	// Circuit
 	Ogre::SceneNode *circuitNode = _sceneManager->getRootSceneNode()->createChildSceneNode();
@@ -157,10 +170,12 @@ GameScene::_createDynamicWorld()
 		)
 	);
 
+
 	rigidBody = new OgreBulletDynamics::RigidBody("stones", _world);
 	rigidBody->setStaticShape(circuitNode, trimeshConverter->createTrimesh(), 0.1, 0.8, Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
 	delete trimeshConverter;
+	builder->castShadows(true);
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
 
 	trimeshConverter->addEntity(
@@ -188,7 +203,6 @@ GameScene::_createDynamicWorld()
 	delete trimeshConverter;
 
 	trimeshConverter = new OgreBulletCollisions::StaticMeshToShapeConverter();
-
 	trimeshConverter->addEntity(
 		static_cast<Ogre::Entity *>(
 			builder->modelPath("house.mesh")

@@ -10,7 +10,7 @@ material plane
             {
                 texture sand.jpg
                 tex_address_mode clamp
-                scale 0.00007 0.00007
+                scale 0.00004 0.00004
                 tex_coord_set 0
                 colour_op modulate
             }
