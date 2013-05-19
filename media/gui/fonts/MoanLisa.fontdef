@@ -1,0 +1,7 @@
+MoanLisa
+{
+	type truetype
+	source MoanLisa.otf
+	size 30
+	resolution 96
+}

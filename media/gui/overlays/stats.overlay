@@ -1,0 +1,58 @@
+Stats
+{
+	zorder 200
+
+		container Panel(statsPanel)
+		{
+			metrics_mode pixels
+			left 0
+			top 0
+			width 254
+			height 768
+			vert_align top
+			
+			element TextArea(bestTimeLabel)
+			{
+				metrics_mode pixels
+				left 40
+				top 10
+				font_name MoanLisa
+				char_height 50
+				colour 0 0 0
+				caption Best time
+			}
+
+			element TextArea(bestTimeValue)
+			{ 
+				metrics_mode pixels
+				left 110
+				top 100
+				font_name MoanLisa
+				char_height 70
+				colour 0 0 0
+				caption 0
+			}
+
+			element TextArea(timeLabel)
+			{
+				metrics_mode pixels
+				left 800
+				top 10
+				font_name MoanLisa
+				char_height 50
+				colour 0 0 0
+				caption Tiempo
+			}
+
+			element TextArea(timeValue)
+			{
+				metrics_mode pixels
+				left 850
+				top 100
+				font_name MoanLisa
+				char_height 70
+				colour 0 0 0 
+				caption 0
+			}
+		}
+}

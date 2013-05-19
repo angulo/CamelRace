@@ -27,16 +27,25 @@ CamelWidget::_updateDirection(const Ogre::FrameEvent& event)
 
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 	
+	float modification = 0;
+
 	if (keyboard->isKeyDown(OIS::KC_LEFT)) {
 		if (steering < 0.4)
-			steering += (event.timeSinceLastFrame * 0.15);
+			modification = event.timeSinceLastFrame * 0.15;
 	} else if (keyboard->isKeyDown(OIS::KC_RIGHT)) {
 		if (steering > -0.4)
-			steering -= (event.timeSinceLastFrame * 0.15);
+			modification = -(event.timeSinceLastFrame * 0.15);
 	} else {
-		steering = steering > 0 ? steering - (event.timeSinceLastFrame * 0.5) : 
-			steering + (event.timeSinceLastFrame * 0.5);
+		modification = event.timeSinceLastFrame * 0.5;
+		if (steering > 0) {
+			modification = - std::min(steering, modification);		
+		} else if (steering < 0){
+			modification = - std::max(steering, -modification);		
+		}
+
 	}
+
+	steering += modification;
 
 	_vehicle->setSteeringValue(steering, 0); 
 	_vehicle->setSteeringValue(steering, 1); 
@@ -47,7 +56,7 @@ CamelWidget::_updatePower(const Ogre::FrameEvent& event)
 {
 	OIS::Keyboard *keyboard = OGF::InputManager::getSingletonPtr()->getKeyboard();
 
-	float engineForce = 2000;
+	float engineForce = 30000;
 
 	_vehicle->applyEngineForce(0, 0);
 	_vehicle->applyEngineForce(0, 1);
@@ -64,7 +73,7 @@ CamelWidget::_updatePower(const Ogre::FrameEvent& event)
 CamelWidget::CamelWidget(Ogre::SceneManager *sceneManager, OgreBulletDynamics::DynamicsWorld *world)
 	: Scene(sceneManager), _world(world)
 {
-
+	_initConfigReader("scenes/game.cfg");
 }
 
 CamelWidget::~CamelWidget()
@@ -76,6 +85,12 @@ Ogre::SceneNode *
 CamelWidget::getTrackingNode()
 {
 	return _trackingNode;
+}
+
+OgreBulletCollisions::Object *
+CamelWidget::getCollisionObject()
+{
+	return _world->findObject(_vehicle->getBulletVehicle()->getRigidBody());
 }
 
 void
@@ -96,6 +111,8 @@ CamelWidget::enter()
 	Ogre::SceneNode *chassisNode = chassisBuilder->castShadows(true)
 		->parent(_trackingNode)
 		->position(chassisShift)
+		->nodeName("chassis")
+		->queryFlags(1)
 		->buildNode();
 	
 	OgreBulletCollisions::BoxCollisionShape *chassisShape = new OgreBulletCollisions::BoxCollisionShape(Ogre::Vector3(1.f, 0.75f, 2.1f));
@@ -105,7 +122,9 @@ CamelWidget::enter()
 
 	OgreBulletDynamics::WheeledRigidBody  *carChassis = new  OgreBulletDynamics::WheeledRigidBody("carChassis", _world);
 
-	carChassis->setShape(_trackingNode, compound, 0.6, 0.6, 800, Ogre::Vector3(0, 12.75, 0), Ogre::Quaternion::IDENTITY);
+	Ogre::Vector3 position(_configValue<float>("camel_x"), 3, _configValue<float>("camel_z")); 
+
+	carChassis->setShape(_trackingNode, compound, 0.6, 0.6, 800, position, Ogre::Quaternion(0.7, 0, 0.7, 0));
 	carChassis->setDamping(0.2, 0.2);
 	carChassis->disableDeactivation();
 
@@ -123,6 +142,7 @@ CamelWidget::enter()
 	OGF::ModelBuilderPtr wheelBuilder(OGF::ModelFactory::getSingletonPtr()->getBuilder(_sceneManager, Model::WHEEL));
 
 	wheelBuilder->castShadows(true)
+		->queryFlags(1)
 		->parent(_sceneManager->getRootSceneNode()->createChildSceneNode ());
 
 	for (size_t i = 0; i < 4; i++) {
@@ -146,6 +166,9 @@ CamelWidget::enter()
 
 	connectionPoint = Ogre::Vector3(1 - (0.3 * gWheelWidth), connectionHeight, -2 + gWheelRadius);
 	_vehicle->addWheel(wheelNodes[3], connectionPoint, wheelDirectionCS0, wheelAxleCS, gSuspensionRestLength, gWheelRadius, isFrontWheel, gWheelFriction, gRollInfluence);
+
+	_vehicle->setSteeringValue(0, 0); 
+	_vehicle->setSteeringValue(0, 1); 
 }
 
 void

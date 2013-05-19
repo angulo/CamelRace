@@ -20,6 +20,8 @@
 #define _GAME_SCENE_H_
 
 #include <OGF/OGF.h>
+#include <OGRE/OgreFontManager.h>
+#include <vector>
 
 #include <Debug/OgreBulletCollisionsDebugDrawer.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
@@ -53,9 +55,20 @@ namespace CamelRace {
 			CamelWidget *_camel;
 			OGF::ChildId _camelChildId;
 
+			Ogre::Timer *_counter;
+			unsigned long _bestTime;
+			
+			std::vector<std::string> _finishLinesState; 
+			int _finishLinesPointer;
+
+			std::string _checkFinishLine();
 			void _createCircuit();
+			void _createFinishLines();
 			void _createDynamicWorld();
 			void _createScene();
+			void _loadOverlay();
+			void _updateCounter(const std::string &camelPosition);
+			void _updateCounterOverlay();
 		
 		public:
 			

@@ -52,6 +52,7 @@ namespace CamelRace {
 			~CamelWidget();
 
 			Ogre::SceneNode *getTrackingNode();
+			OgreBulletCollisions::Object *getCollisionObject();
 
 			void enter();
 			void exit();
