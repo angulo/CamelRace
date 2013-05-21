@@ -25,7 +25,7 @@ namespace CamelRace {
 	{
 		OGF::ModelMap idToModel;
 
-		idToModel[Model::CHASSIS] = "chassis.mesh";
+		idToModel[Model::CHASSIS] = "camel.mesh";
 		idToModel[Model::CIRCUIT_INTERN] = "internCurve.mesh";
 		idToModel[Model::CIRCUIT_EXTERN] = "externCurve.mesh";
 		idToModel[Model::PLANE] = "plane.mesh";
