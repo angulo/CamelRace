@@ -1,0 +1,36 @@
+====================
+Compile instructions
+====================
+
+1.- Download and install the OGF (v0.2b) library from: 
+
+	https://github.com/angulo/ogf/tree/v0.2b
+
+2.- Download and install the next dependencies:
+	
+	- bullet
+	- ogrebullet
+
+3.- Run the next commands:
+	
+	$ sh autogen.sh
+	$ ./configure
+	$ make
+
+4.- If any error appears in the configure phase, check the output to install
+the required packages
+
+================
+Run instructions
+================
+
+1.- To run the game, execute:
+	
+	$ ./play.sh
+
+
+====
+Help
+====
+
+Write to javier.angulo1@gmail.com
