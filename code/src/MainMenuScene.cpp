@@ -75,7 +75,6 @@ MainMenuScene::enter()
 	_container->addChildWindow(_windowBackground);
 
 	_optionsMap[MainMenuOption::PLAY] = _createOptionWindow("PLAY", _configValue<std::string>("font_big"), _configValue<int>("play_x"), _configValue<int>("play_y"));
-	_optionsMap[MainMenuOption::OPTIONS] = _createOptionWindow("OPTIONS", _configValue<std::string>("font_small"),  _configValue<int>("options_x"), _configValue<int>("options_y"));
 	_optionsMap[MainMenuOption::TEAM] = _createOptionWindow("TEAM", _configValue<std::string>("font_small"),  _configValue<int>("help_x"), _configValue<int>("help_y"));
 	_optionsMap[MainMenuOption::EXIT] = _createOptionWindow("EXIT", _configValue<std::string>("font_small"),  _configValue<int>("exit_x"), _configValue<int>("exit_y"));
 
@@ -95,9 +94,6 @@ MainMenuScene::_processCurrentOption()
 	switch(_currentOption) {
 		case MainMenuOption::PLAY:
 			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::GAME);
-			break;
-		case MainMenuOption::OPTIONS:
-			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_OPTIONS);
 			break;
 		case MainMenuOption::TEAM:
 			OGF::SceneController::getSingletonPtr()->push(CamelRace::Scene::MENU_TEAM);

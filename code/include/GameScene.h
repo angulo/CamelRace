@@ -61,6 +61,8 @@ namespace CamelRace {
 			std::vector<std::string> _finishLinesState; 
 			int _finishLinesPointer;
 
+			OGF::SoundTrackPtr _soundMainTheme;
+
 			std::string _checkFinishLine();
 			void _createCircuit();
 			void _createFinishLines();

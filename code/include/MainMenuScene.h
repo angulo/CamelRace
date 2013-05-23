@@ -30,9 +30,8 @@ namespace CamelRace {
 
 		enum Option {
 			PLAY = 0,
-			OPTIONS = 1,
-			TEAM = 2,
-			EXIT = 3
+			TEAM = 1,
+			EXIT = 2
 		};
 	};
 

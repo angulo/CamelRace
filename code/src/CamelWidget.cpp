@@ -64,9 +64,20 @@ CamelWidget::_updatePower(const Ogre::FrameEvent& event)
 	if (keyboard->isKeyDown(OIS::KC_UP)) {
 		_vehicle->applyEngineForce(engineForce, 0);
 		_vehicle->applyEngineForce(engineForce, 1);
+
+		Ogre::AnimationState *animState = _sceneManager->getEntity("camel")->getAnimationState("my_animation");
+		animState->setEnabled(true);
+		animState->setLoop(true);
 	} else if (keyboard->isKeyDown(OIS::KC_DOWN)) {
 		_vehicle->applyEngineForce(-engineForce * 0.75, 0);
 		_vehicle->applyEngineForce(-engineForce * 0.75, 1);
+
+		Ogre::AnimationState *animState = _sceneManager->getEntity("camel")->getAnimationState("my_animation");
+		animState->setEnabled(true);
+		animState->setLoop(true);
+	} else {
+		Ogre::AnimationState *animState = _sceneManager->getEntity("camel")->getAnimationState("my_animation");
+		animState->setEnabled(false);
 	}
 }
 
@@ -111,7 +122,8 @@ CamelWidget::enter()
 	Ogre::SceneNode *chassisNode = chassisBuilder->castShadows(true)
 		->parent(_trackingNode)
 		->position(chassisShift)
-		->nodeName("chassis")
+		->entityName("camel")
+		->nodeName("camel")
 		->queryFlags(1)
 		->buildNode();
 	
@@ -171,6 +183,12 @@ CamelWidget::enter()
 
 	_vehicle->setSteeringValue(0, 0); 
 	_vehicle->setSteeringValue(0, 1); 
+
+	Ogre::AnimationState *animState = _sceneManager->getEntity("camel")->getAnimationState("my_animation");
+
+	animState->setEnabled(true);
+	animState->setLoop(true);
+	animState->setTimePosition(0.0);
 }
 
 void
@@ -196,6 +214,15 @@ CamelWidget::frameStarted(const Ogre::FrameEvent& event)
 {
 	_updateDirection(event);
 	_updatePower(event);
+
+	Ogre::AnimationState *animState = _sceneManager->getEntity("camel")->getAnimationState("my_animation");
+	
+	if (!animState->hasEnded()) {
+		animState->addTime(event.timeSinceLastFrame);
+	} else {
+		animState->setEnabled(true);
+		animState->setTimePosition(0.0);
+	}
 
 	return true;
 }

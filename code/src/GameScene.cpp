@@ -68,7 +68,6 @@ GameScene::_checkFinishLine()
 void
 GameScene::_createCircuit()
 {
-	
 	//Lights
 	_sceneManager->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 	_sceneManager->setShadowTextureCount(2);
@@ -355,7 +354,11 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	_soundMainTheme->stop();
 
+	Ogre::OverlayManager *overlayManager = Ogre::OverlayManager::getSingletonPtr();
+	Ogre::Overlay *statsOverlay = overlayManager->getByName("Stats");
+	statsOverlay->hide();
 }
 
 void
@@ -363,12 +366,24 @@ GameScene::enter()
 {
 	_createScene();
 	_loadOverlay();
+
+	_soundMainTheme = OGF::SoundTrackManager::getSingletonPtr()->load("theme.mp3");
+	_soundMainTheme->play(true);
 }
 
 void
 GameScene::exit()
 {
+	_soundMainTheme->stop();
 
+	_sceneManager->destroyAllCameras();
+	_sceneManager->destroyAllStaticGeometry();
+	_sceneManager->destroyAllMovableObjects();
+	_sceneManager->destroyAllAnimationStates();
+	_sceneManager->destroyAllLights();
+
+	Ogre::SceneNode *root = _sceneManager->getRootSceneNode();
+	root->removeAndDestroyAllChildren();
 }
 
 void
@@ -423,6 +438,10 @@ GameScene::frameEnded(const Ogre::FrameEvent& event)
 bool
 GameScene::keyPressed(const OIS::KeyEvent& event)
 {
+	if (event.key == OIS::KC_ESCAPE) {
+		OGF::SceneController::getSingletonPtr()->pop();
+	}
+
 	return true;
 }
 
